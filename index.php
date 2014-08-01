@@ -1,5 +1,5 @@
 <?php
-
+// Default template file
 
 ?>
 <!DOCTYPE html>
@@ -9,7 +9,7 @@
 <meta charset="<?php bloginfo('charset'); ?>" />
 <meta name="viewport" content="initial-scale=1,user-scalable=yes,minimal-ui">
 
-<title><?php wp_title( __('&rsaquo;', 'allin'), true, 'right' ); ?></title>
+<title><?php wp_title( __('&rsaquo;', 'first'), true, 'right' ); ?></title>
 
 <?php wp_head(); ?>
 
@@ -18,7 +18,7 @@
 <body <?php body_class(); ?>>
 
 <a id="top"></a>
-<a href="#copy" class="srt skip"><?php _e('Skip to content &rsaquo;', 'allin'); ?></a>
+<a href="#copy" class="srt skip"><?php _e('Skip to content &rsaquo;', 'first'); ?></a>
 
 <header class="header">
 
@@ -34,7 +34,7 @@
 	<div class="description"><span><?php bloginfo('description'); ?></span></div>
 
 	<nav id="nav" class="nav">
-	<!--a class="toggle"><?php _e('Navigation', 'allin'); ?></a-->
+	<!--a class="toggle"><?php _e('Navigation', 'first'); ?></a-->
 	<?php
 		wp_nav_menu( array(
 			'theme_location' => 'nav',
@@ -75,11 +75,11 @@ if ( have_posts() ) : // If we've got posts to show
 		
 		$author_url     = '<a class="author vcard"><span class="fn">' . get_the_author() . '</span></a>';
 		$published_date = '<span class="published">' . get_the_date() . '</span>';
-		$updated_date   = sprintf( '<span class="hide modified">' . __(' Updated on %s.', 'allin') . '</span>',
+		$updated_date   = sprintf( '<span class="hide modified">' . __(' Updated on %s.', 'first') . '</span>',
 			the_modified_date( '', '<span class="updated">', '</span>', false )
 		);
 		
-		printf( __('Posted by %s on %s.', 'allin') . $updated_date,
+		printf( __('Posted by %s on %s.', 'first') . $updated_date,
 			$author_url,
 			$published_date
 		)
@@ -112,11 +112,11 @@ if ( have_posts() ) : // If we've got posts to show
 	<footer class="entry-footer"><?php
 		if ( is_single() ) {
 		
-			printf( '<span class="categories">' . __('Filled under %s', 'allin') . '</span>',
-				get_the_category_list( __(', ', 'allin') )
+			printf( '<span class="categories">' . __('Filled under %s', 'first') . '</span>',
+				get_the_category_list( _x(', ', 'category separator', 'first') )
 			);
-			printf( '<br/><span class="tags">' . __('Tagged %s', 'allin') . '</span>',
-				get_the_tag_list( '', __(', ', 'allin'), '' )
+			printf( '<br/><span class="tags">' . __('Tagged %s', 'first') . '</span>',
+				get_the_tag_list( '', _x(', ', 'tag separator', 'first'), '' )
 			);
 			
 		} elseif ( is_singular() && get_the_taxonomies() ) {
@@ -166,15 +166,15 @@ else : // No posts found
 	<h1><?php // Show a proper page title
 		if ( is_404() ) {
 		
-			_e('Page not found', 'allin');
+			_e('Page not found', 'first');
 		
 		} elseif ( is_search() ) {
 		
-			_e('No results found', 'allin');
+			_e('No results found', 'first');
 		
 		} else {
 		
-			_e('Nothing to show', 'allin');
+			_e('Nothing to show', 'first');
 		
 		}
 	?></h1>
@@ -185,15 +185,15 @@ else : // No posts found
 	
 		if ( is_404() ) {
 		
-			_e('Sorry, the requested page does not exist or is not available at this time.', 'allin');
+			_e('Sorry, the requested page does not exist or is not available at this time.', 'first');
 		
 		} elseif ( is_search() ) {
 		
-			_e('No results have been found to match your search query. Try searching again using different words, or <a href="%s">go back to the homepage</a> and start browsing from there.', 'allin');
+			_e('No results have been found to match your search query. Try searching again using different words, or <a href="%s">go back to the homepage</a> and start browsing from there.', 'first');
 		
 		} else {
 		
-			_e('We don\'t seem to find what you\'re looking for. Maybe searching can help.', 'allin');
+			_e('We don\'t seem to find what you\'re looking for. Maybe searching can help.', 'first');
 		
 		}
 	
@@ -238,7 +238,7 @@ do_action('after_copy');
 <footer class="footer">
 
 <div class="colophon"><?php
-	echo apply_filters('the_colophon', __('Copyright &copy;. Designed by AlexMarkus. Powered by WordPress.', 'allin') );
+	echo apply_filters('the_colophon', __('Copyright &copy;. Designed by AlexMarkus. Powered by WordPress.', 'first') );
 ?></div>
 
 </footer>

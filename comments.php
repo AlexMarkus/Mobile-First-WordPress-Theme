@@ -37,8 +37,8 @@ if ( have_comments() ) : // Show the comments
 	?>
 	
 	<nav class="nav comment-nav" role="navigation">
-		<div class="nav-previous"><?php previous_comments_link( __( '&larr; Older Comments', 'allin' ) ); ?></div>
-		<div class="nav-next"><?php next_comments_link( __( 'Newer Comments &rarr;', 'allin' ) ); ?></div>
+		<div class="nav-previous"><?php previous_comments_link( __( '&larr; Older Comments', 'first' ) ); ?></div>
+		<div class="nav-next"><?php next_comments_link( __( 'Newer Comments &rarr;', 'first' ) ); ?></div>
 	</nav><!-- /.comment-nav -->
 
 	<?php
@@ -51,7 +51,7 @@ if ( have_comments() ) : // Show the comments
 
 ?>
 
-	<p class="no-comments"><?php _e( 'Comments are closed.', 'allin' ); ?></p>
+	<p class="no-comments"><?php _e( 'Comments are closed.', 'first' ); ?></p>
 
 <?php
 
