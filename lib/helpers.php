@@ -1,6 +1,8 @@
 <?php
 
 
+// Pluggable filters
+
 if ( ! function_exists('filter_the_wp_title') ) {
 // Creates a nicely formatted and more specific title text
 function filter_the_wp_title($title, $sep) {
@@ -38,13 +40,6 @@ function filter_the_wp_title($title, $sep) {
 }// filter_the_wp_title
 
 
-if ( ! function_exists('wp_head_inline_html5shiv') ) {
-function wp_head_inline_html5shiv() {
-	printf("<!--[if lt IE 9]><script>'aside, details, figcaption, figure, footer, header, hgroup, main, nav, section, summary, time'.replace(/\w+/g,function(n){document.createElement(n)})</script><![endif]-->\n");
-}
-}// wp_head_inline_html5shiv
-
-
 if ( ! function_exists('filter_the_branding_title') ) {
 function filter_the_branding_title( $the_title ) {
 	return sprintf( '<span>%s</span>', $the_title );
@@ -54,7 +49,7 @@ function filter_the_branding_title( $the_title ) {
 
 if ( ! function_exists('filter_the_colophon') ) {
 function filter_the_colophon( $the_colophon ) {
-	return wpautop($the_colophon);
+	return wpautop( do_shortcode($the_colophon) );
 }
 }// filter_the_colophon
 
@@ -72,6 +67,21 @@ function filter_the_post_class( $classes ) {
 	return $classes;
 }
 }// filter_the_post_class
+
+if ( ! function_exists('filter_gallery_atts') ) {
+// Change the default gallery thumbnail size
+function filter_gallery_atts( $out, $pairs, $atts ) {
+
+	$atts = shortcode_atts( array(
+		'size' => 'gallery',
+	 ), $atts );
+
+	$out['size'] = $atts['size'];
+
+	return $out;
+
+}
+} // filter_gallery_atts
 
 
 // Pluggable Template Tags
@@ -119,7 +129,7 @@ function the_featured_image( $size = '', $class = '' ) {
 <?php
 	} else {
 ?>
-	<a class="featured-image<?php if ( $class ) { echo ' ' . $class; } ?>" href="<?php the_permalink(); ?>"><?php the_post_thumbnail($thumbnail_size); ?></a>
+	<a class="featured-image<?php if ( $class ) { echo ' ' . $class; } ?>" href="<?php esc_attr( the_permalink() ); ?>"><?php the_post_thumbnail($thumbnail_size); ?></a>
 <?php
 	}
 
@@ -127,12 +137,54 @@ function the_featured_image( $size = '', $class = '' ) {
 } // the_featured_image
 
 
+if ( ! function_exists('the_posted_on') ) {
+// Shows the posted on
+function the_posted_on( $before = '<p class="entry-meta postedon">', $after = '</p>' ) {
+
+	$author_url     = '<a class="author vcard"><span class="fn">' . get_the_author() . '</span></a>';
+	$published_date = '<span class="published">' . get_the_date() . '</span>';
+	$updated_date   = sprintf( '<span class="hide modified"> ' . __('Updated on %s.', 'first') . '</span>',
+		'<span class="updated">' . get_the_modified_date() . '</span>'
+	);
+	
+	printf( $before . __('Posted by %s on %s.%s', 'first') . $after, $author_url, $published_date, $updated_date );
+
+}
+} // the_posted_on
+
+
+if ( ! function_exists('the_posted_meta') ) {
+// Shows the post meta
+function the_posted_meta( $before = '<footer class="entry-meta"><p>', $after = '</p></footer>' ) {
+
+	echo $before;
+	
+	if ( is_single() ) {
+	
+		if ( $categories = get_the_category_list( _x(', ', 'category separator', 'first') ) ) {
+			printf( '<span class="categories">' . __('Filled under %s.', 'first') . '</span> ', $categories );
+		}
+		
+		if ( $tags = get_the_tag_list( '', _x(', ', 'tag separator', 'first'), '' ) ) {
+			printf( '<span class="tags">' . __('Tagged %s.', 'first') . '</span>', $tags );
+		}
+		
+	} elseif ( is_singular() && get_the_taxonomies() ) {
+		the_taxonomies();
+	}
+	
+	echo $after;
+
+}
+} // the_posted_meta
+
+
 if ( ! function_exists('the_breadcrumbs') ) {
 // Shows the breadcrumbs
 function the_breadcrumbs($before = '', $after = '') {
 
 	if ( function_exists('yoast_breadcrumb') ) {
-		yoast_breadcrumb( $before . '<p class="breadcrumbs">', '</p>' . $after );
+		yoast_breadcrumb( $before . '<p class="bc breadcrumbs">', '</p>' . $after );
 	}
 
 }
@@ -237,18 +289,18 @@ function the_page_header() {
 	}
 
 	?>
-<div class="page-header">
+<div class="ph page-header">
 	<?php
 		if ( ! empty($page_title) ) {
-			printf( '<h1 class="page-title">%s</h1>', $page_title );
+			printf( '<h1 class="pt page-title">%s</h1>', $page_title );
 		}
 		if ( ! empty($page_description) ) {
-			printf( '<div class="page-description">%s</div>', $page_description );
+			printf( '<div class="pd page-description">%s</div>', $page_description );
 		}
 		if ( is_tax() || is_category() || is_tag() ) {
-			edit_term_link( null, '<p class="edit-link">', '</p>' );
+			edit_term_link( null, '<p class="el edit-link">', '</p>' );
 		} elseif ( is_home() ) {
-			edit_post_link( null, '<p class="edit-link">', '</p>' );
+			edit_post_link( null, '<p class="el edit-link">', '</p>' );
 		}
 	?>
 </div>
@@ -258,3 +310,82 @@ function the_page_header() {
 
 }
 } // the_page_header
+
+
+if ( ! function_exists('the_post_nav') ) {
+// Show links to next/previous post @todo: $args
+function the_post_nav( $before = '', $after = '' ) {
+
+	if ( ! is_single() ) {
+		return;
+	}
+
+	if ( empty($before) ) {
+		$before = '<div class="post-nav"><p>';
+	}
+	if ( empty($after) ) {
+		$after = '</p></div>';
+	}
+
+	if ( get_next_post() || get_previous_post() ) {
+	
+		echo $before;
+		previous_post_link( '<span class="prev">' . '&laquo; %link' . '</span>' );
+		next_post_link( '<span class="next">' . '%link &raquo;' . '</span>' );
+		echo $after;
+	
+	}
+
+}
+} // the_post_nav
+
+
+if ( ! function_exists('the_archive_nav') ) {
+// Show links to next/previous page @todo: $args
+function the_archive_nav( $before = '', $after = '', $next = '' ) {
+
+	if ( is_singular() ) {
+		return;
+	}
+
+	if ( empty($before) ) {
+		$before = '<div class="archive-nav"><p>';
+	}
+	if ( empty($after) ) {
+		$after = '</p></div>';
+	}
+
+	$prev = __('&lsaquo; Previous Page', 'first');
+	$next = __('Next Page &rsaquo;', 'first');
+
+	if ( is_search() ) {
+		$next = __('More results &rsaquo;', 'first');
+	}
+
+	if ( get_next_posts_link() || get_previous_posts_link() ) {
+	
+		echo $before;
+		previous_posts_link( $prev );
+		next_posts_link( $next );
+		echo $after;
+	
+	}
+
+}
+} // the_archive_nav
+
+
+/* Pluggable support hooks */
+
+if ( ! function_exists('wp_head_inline_html5shiv') ) {
+function wp_head_inline_html5shiv() {
+	printf('<!--[if lt IE 9]><script>\'aside, details, figcaption, figure, footer, header, hgroup, main, nav, section, summary, time\'.replace(/\w+/g,function(n){document.createElement(n)})</script><![endif]-->' . "\n");
+}
+}// wp_head_inline_html5shiv
+
+
+if ( ! function_exists('wp_head_respondjs_ie') ) {
+function wp_head_respondjs_ie() {
+	printf( '<!--[if lt IE 9]><script src="%s/lib/js/respond.min.js"></script><![endif]-->' . "\n", get_template_directory_uri() );
+}
+}// wp_head_respondjs_ie

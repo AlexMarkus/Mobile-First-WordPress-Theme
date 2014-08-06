@@ -1,7 +1,5 @@
 <?php
 
-do_action( 'before_comments' );
-
 // Check if we have anything to show
 if ( post_password_required() ) {
 	return;
