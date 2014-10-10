@@ -16,27 +16,27 @@ if ( have_comments() ) : // Show the comments
 
 	<h3 class="comments-title"><?php
 		printf(
-			_n( 'One Response to %2$s', '%1$s Responses to %2$s', get_comments_number(), 'twentyten' ),
+			_n( 'One response to %2$s', '%1$s responses to %2$s', get_comments_number(), 'mobilefirst' ),
 			number_format_i18n( get_comments_number() ),
 			'<em>' . get_the_title() . '</em>' 
 		);
 	?></h3>
 
-	<ol class="comment-list"><?php
+	<div class="comment-list"><ul><?php
 		wp_list_comments( array(
-			'style'       => 'ol',
+			'style'       => 'ul',
 			'short_ping'  => true,
 			'avatar_size' => 64,
 		) );
-	?></ol>
+	?></ul></div>
 
 	<?php
 		if ( get_comment_pages_count() > 1 && get_option('page_comments') ) :
 	?>
 	
 	<nav class="nav comment-nav" role="navigation">
-		<div class="nav-previous"><?php previous_comments_link( __( '&larr; Older Comments', 'first' ) ); ?></div>
-		<div class="nav-next"><?php next_comments_link( __( 'Newer Comments &rarr;', 'first' ) ); ?></div>
+		<div class="nav-previous"><?php previous_comments_link( __( '‹ Older comments', 'mobilefirst' ) ); ?></div>
+		<div class="nav-next"><?php next_comments_link( __( 'Newer comments ›', 'mobilefirst' ) ); ?></div>
 	</nav><!-- /.comment-nav -->
 
 	<?php
@@ -49,7 +49,7 @@ if ( have_comments() ) : // Show the comments
 
 ?>
 
-	<p class="no-comments"><?php _e( 'Comments are closed.', 'first' ); ?></p>
+	<p class="no-comments"><?php _e( 'Comments are closed.', 'mobilefirst' ); ?></p>
 
 <?php
 

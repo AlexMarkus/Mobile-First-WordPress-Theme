@@ -7,32 +7,31 @@ get_header(); ?>
 <div class="hfeed">
 <?php
 
-do_action('before_feed');
+do_action('before_posts');
 
 ?>
 
 	<article <?php post_class(); ?>>
 	
 	<header>
-	<h1 class="entry-title"><?php _e('Page not found', 'first'); ?></h1>
+	<h1 class="et entry-title"><?php _e('Page not found', 'mobilefirst'); ?></h1>
 	</header>
 	
-	<div class="entry-content">
-	<p><?php _e('Sorry, the requested page does not exist or is not available at this time.', 'first'); ?></p>
+	<div class="ec entry-content">
+	<p><?php _e('Sorry, the requested page does not exist or is not available at this time.', 'mobilefirst'); ?></p>
 	</div>
 	
 	</article>
 
 <?php
 
-do_action('after_feed');
+do_action('after_posts');
 
 ?>
 </div><!-- /.hfeed -->
 
 <?php
 
-	get_sidebar();
 	do_action('after_copy');
 
 ?>

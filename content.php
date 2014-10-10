@@ -1,26 +1,34 @@
 <?php
 // Default post content
 
+do_action('before_post');
+
 ?>
 	<article <?php post_class(); ?>>
 	
 	<header>
-	<?php the_post_title(); ?>
-	<?php the_posted_on(); ?>
+	<?php do_action('the_post_header'); ?>
 	</header>
 
-	<?php the_featured_image(); ?>
+	<?php do_action('before_post_content'); ?>
 
-	<div class="entry-content">
+	<div class="ec entry-content">
 	<?php
-		the_content( __('Read more &rsaquo;', 'first') );
+	if ( ! is_search() ) {
+		the_content( __('Read more ›', 'mobilefirst') );
+	} else {
+		the_excerpt();
+	}
 		
 		wp_link_pages();
 		
-		edit_post_link();
+		if ( is_singular() ) {
+			edit_post_link(null, '<p class="el edit-link">', '</p>');
+		}
 	?>
 	</div>
 	
-	<?php the_posted_meta(); ?>
+	<?php do_action('after_post_content'); ?>
 	
 	</article>
+<?php do_action('after_post'); ?>

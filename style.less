@@ -1,22 +1,22 @@
-/*!
-Theme Name: First
-Theme URI: 
-Description: 
-Version: 1
+/*
+Theme Name: MobileFirst
+Theme URI:  
+Description: The responsive, mobile first WordPress starter theme.
+Version: 0.1.0
 Author: AlexMarkus
 Author URI: http://www.alexmarkus.com/
 Tags: light, white, black, one-column, two-columns, responsive-layout, featured-images, full-width-template, microformats, sticky-post, threaded-comments, translation-ready
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Text Domain: first
+Text Domain: mobilefirst
 */
 
 /* 1.0 Libraries & mixins */
 
 // Libraries
-@import (less) "/lib/css/normalize.css";
+@import (less) "../mobilefirst/lib/css/normalize.min.css";
 
-// Mixins
+// #Mixins
 .box-sizing(@sizing:border-box) {
 	-ms-box-sizing:@sizing;
 	-moz-box-sizing:@sizing;
@@ -56,40 +56,25 @@ Text Domain: first
 
 /* 2.0 Repeatable patterns */
 
-// Vars
-
 // Render everything as a border-box
-* {
+*, *:before, *:after {
 	.box-sizing;
 }
 
-/* Responsive images and embeds */
-img,
-embed,
-figure,
-object,
-{
+// Responsive images and embeds
+img, embed, figure, object {
 	max-width:100%;
 	height:auto;
-	* html & {// IE6
-		width:100%;
-	}
 }
 
-/* Fit inputs in their containers */
-input,
-select,
-button,
-textarea {
+// Fit inputs in their containers
+input, select, button, textarea, iframe {
 	max-width:100%;
 }
 
-/* Micro clearfix */
+/* Ready-to-use classes */
+// Micro clearfix
 .cf {
-	min-height:0;// IE7
-	* html & {// IE6. Why am I doing this?
-		height:1%;
-	}
 	&:before, &:after {
 		content:" ";
 		display:table;
@@ -99,55 +84,71 @@ textarea {
 	}
 }
 
-/* Ready-to-use classes */
-.left, .alignleft {
-	float:left;
+// Block/inline elements
+.block {
+	display:block;
+}
+.inline {
+	display:inline;
 }
 
-.right, .alignright {
-	float:right;
-}
-
-.center, .aligncenter {
+// Alignments
+.center-block {
+	display:block;
 	margin-left:auto;
 	margin-right:auto;
+}
+.left {
+	float:left;
+}
+.right {
+	float:right;
+}
+.center, .aligncenter {
+	.center-block;
 	float:none!important;
 }
 
-.text-center {
-	text-align:center;
-}
-
+// Show/hide classes
 .hide {
 	display:none;
 }
 .show {
-	display:block!important;
+	display:block;
+}
+.invisible {
+	visibility:hidden;
 }
 
+// JS classes
 .js {
 	.hide-js {
 		display:none;
 	}
-	.show-js {
+	.block-js {
 		display:block;
+	}
+	.inline-js {
+		display:inline;
 	}
 }
 
-/* WordPress required classes */
-.wp-caption-text,
-.sticky,
-.gallery-caption,
-.bypostauthor,
-.alignright,
-.alignleft,
-.aligncenter {
-	visibility:visible;
+// Text
+.text-left {
+	text-align:left;
 }
-
-/* Screen reader text */
+.text-center {
+	text-align:center;
+}
+.text-right {
+	text-align:right;
+}
+.hide-text {
+	white-space:nowrap;
+	text-indent:100%;
+	overflow:hidden;
+}
 .srt {
-	clip:rect(1px 1px 1px 1px);// IE6&7
 	clip:rect(1px, 1px, 1px, 1px);
 	position:absolute;
 	&:focus {
@@ -158,39 +159,57 @@ textarea {
 		top:1em;
 	}
 }
+.unselectable {
+	-webkit-user-select:none;
+	-moz-user-select:none;
+	-ms-user-select:none;
+}
+.lead {
+	font-size:1.25em;
+}
 
-/* Gallery */
+// WordPress classes
+.wp-caption-text,
+.sticky,
+.gallery-caption,
+.bypostauthor,
+.alignright,
+.alignleft,
+.aligncenter {
+	top:auto;
+}
+
+// Galleries
 .gallery-item {
 	float:left;
 }
 .gallery-columns-1 .gallery-item {
-	max-width:100%;
+	width:100%;
 }
 .gallery-columns-2 .gallery-item {
-	max-width:50%;
+	width:50%;
 }
 .gallery-columns-3 .gallery-item {
-	max-width:33.3%;
+	width:33.3%;
 }
 .gallery-columns-4 .gallery-item {
-	max-width:25%;
+	width:25%;
 }
 .gallery-columns-5 .gallery-item {
-	max-width:12%;
+	width:12%;
 }
 .gallery-columns-6 .gallery-item {
-	max-width:16.6%;
+	width:16.6%;
 }
 .gallery-columns-7 .gallery-item {
-	max-width:14.2%;
+	width:14.2%;
 }
 .gallery-columns-8 .gallery-item {
-	max-width:12.4%;
+	width:12.4%;
 }
 .gallery-columns-9 .gallery-item {
-	max-width:11.1%;
+	width:11.1%;
 }
-
 .gallery-columns-1 .gallery-item,
 .gallery-columns-2 .gallery-item:nth-of-type(2n+1),
 .gallery-columns-3 .gallery-item:nth-of-type(3n+1),
@@ -202,24 +221,85 @@ textarea {
 .gallery-columns-9 .gallery-item:nth-of-type(9n+1) {
 	clear:left;
 }
+.gallery-caption {
+	margin-bottom:1em;
+}
 
 /* 3.0 Basic structure */
 
-// Breakpoints
-@lg:				~"screen and (min-width:1200px)";// Desktop
-@md:				~"screen and (min-width:992px)";// Netbook
-@sm:				~"screen and (min-width:768px) and (max-width:991px)";// Tablet
-@xs:				~"screen and (max-width:767px)";// Smartphone
-@xxs:				~"screen and (min-width:480px)";// Mobile
-@lap:				~"screen and (min-width:768px)";// Lap devices: tabs and desk
+// #Breakpoints
+@lg:				~"screen and (min-width:75em)";// Desktop
+@md:				~"screen and (min-width:62em)";// Netbook
+@sm:				~"screen and (min-width:48em) and (max-width:62em)";// Tablet
+@xs:				~"screen and (max-width:48em)";// Smartphone
+@xxs:				~"screen and (min-width:30em)";// Mobile
+@lap:				~"screen and (min-width:48em)";// Lap devices
 
-/* The Grid System */
+// #Typefaces
+
+// #Colors
+@white:			#fff;
+@black:			#000;
+
+// #Grid System
 .c {
-	width:768px;// 48em @16px
-	margin:0 auto;
+	width:768px;
 	max-width:100%;
+	margin-left:auto;
+	margin-right:auto;
+	@media @md {
+		width:992px;
+	}
 }
-.grid {
+.c992 {
+	width:992px;
+	margin-left:auto;
+	margin-right:auto;
+}
+.row {
+}
+
+.col-xs-auto, .col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12 {
+	float:left;
+}
+.col-xs-12 {
+	width:100%;
+}
+.col-xs-11 {
+	width:91.66666667%;
+}
+.col-xs-10 {
+	width:83.33333333%;
+}
+.col-xs-9 {
+	width:75%;
+}
+.col-xs-8 {
+	width:66.66666667%;
+}
+.col-xs-7 {
+	width:58.33333333%;
+}
+.col-xs-6 {
+	width:50%;
+}
+.col-xs-5 {
+	width:41.66666667%;
+}
+.col-xs-4 {
+	width:33.33333333%;
+}
+.col-xs-3 {
+	width:25%;
+}
+.col-xs-2 {
+	width:16.66666667%;
+}
+.col-xs-1 {
+	width:8.33333333%;
+}
+.col-xs-auto {
+	width:auto;
 }
 
 @media @sm {
@@ -313,49 +393,54 @@ textarea {
 	}
 }
 
-// Table grid
-.table {
-	width:100%;
-	display:table;
-	table-layout:fixed;
-	.cell {
-		display:table-cell;
-		float:none;
-	}
-	.middle {
-		vertical-align:middle;
-	}
-}
-
-// Flexbox grid
-.flexbox {
-	.flex {
-		display:flex;
-		flex-wrap:wrap;
-		flex-direction:row;
-
-		@media @lap {
-			flex-wrap:nowrap;
-		}
-
-		&.rows {
+// #Flexbox grid
+.row {
+	&.flex {
+		.flexbox & {
+			display:flex;
+			flex-wrap:wrap;
 			flex-direction:row;
-		}
-		&.columns {
-			flex-direction:column;
+			@media @lap {
+				flex-wrap:nowrap;
+			}
 		}
 	}
 }
 
+// #Table grid
+.row {
+	&.table {
+		@media @lap {
+			width:100%;
+			display:table;
+			table-layout:fixed;
+			.cell {
+				display:table-cell;
+				float:none;
+			}
+		}
+	}
+}
 
-// Basic styles
+// #Basic styles
 html {
 }
 
 body {
+	line-height:1.5;
+	max-width:48em;
+	.center-block;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6,
+{
+	margin-bottom:1rem;
+	margin-top:1rem;
+}
+h1, h2, h3, h4,
+{
+	line-height:1.125;
+	font-weight:normal;
 }
 
 a {
@@ -373,33 +458,60 @@ p {
 }
 
 ul, ol {
+	padding-left:1em;
 }
 
 blockquote {
 }
 
+figure {
+	margin:0;
+}
+
+// Selected text
+::selection {
+}
+::-moz-selection {
+}
+
 form {
+	margin-top:1em;
+	margin-bottom:1em;
+}
+fieldset {
+}
+legend {
+}
+label {
+	cursor:pointer;
 }
 
 button,
 input,
 select,
+textarea,
+{
+}
 textarea {
 }
 
-textarea {
+// Input states
+[disabled="disabled"] {	
+}
+:invalid {
+}
+::-webkit-input-placeholder {
+}
+::-moz-placeholder {
+}
+:-ms-input-placeholder {
 }
 
 button,
 input[type="button"],
 input[type="submit"],
-input[type="reset"] {
-	-webkit-appearance:button;
-	cursor:pointer;
-}
-
-label {
-	cursor:pointer;
+input[type="reset"],
+{
 }
 
 table {
@@ -415,12 +527,56 @@ thead {
 tbody {
 }
 
-/* Ready to use site classes */
-.heading {
-}
-.content {
+// #Shared styles
+.widget,
+.hentry,
+.comments,
+{
+	word-wrap:break-word;
 }
 
+.branding .logo,
+.branding .tagline,
+.branding .skip-nav,
+.branding .nav,
+.hfeed .page-header,
+.hfeed .entry-title,
+.hfeed .entry-meta,
+.hfeed .featured-image,
+.hfeed .entry-content,
+.hfeed .post-nav,
+.hfeed .archive-nav,
+.sidebar .widget,
+.comments-title,
+.comment-list,
+.comment-respond,
+.footer .colophon,
+{
+	padding-left:1rem;
+	padding-right:1rem;
+}
+
+.nav,
+.comments,
+.widgets,
+{
+	ul {
+		list-style:none;
+		padding-left:0;
+		ul {
+			padding-left:1em;
+		}
+	}
+}
+
+.gallery,
+{
+	.cf;
+}
+
+// Ready to use site classes
+.btn {
+}
 
 /* 4.0 Header */
 .header {
@@ -430,12 +586,21 @@ tbody {
 .nav {
 }
 
+.skip-nav {
+}
+
 // Page header
 .page-header {
 }
 .page-title {
 }
 .page-description {
+}
+
+.page-title,
+.single .et,
+.page .et,
+{
 }
 
 // Breadcrumbs
@@ -462,22 +627,61 @@ tbody {
 }
 .entry-title {
 }
+.entry-subtitle {
+	display:block;
+	font-size:.75em;
+}
+.entry-title-primary {
+}
 .entry-meta {
 }
 .postedon {
+	display:none;
+	.type-post & {
+		display:block;
+	}
 }
 .featured-image {
+	img {
+		display:block;
+	}
 }
 .entry-content {
+	.alignleft,
+	.alignright {
+	}
+	.alignleft {
+	}
+	.alignright {
+	}
 }
 
+// Captions & Galleries
+.wp-caption-text {
+}
+.gallery {
+}
+.gallery-item {
+	img {
+		display:block;
+	}
+}
+.gallery-caption {
+}
+
+// Post links
+.more-link {
+}
 .page-links {
+	clear:both;
 }
 .post-edit-link {
 }
 
 // Posts
 .type-post {
+}
+.sticky {
 }
 
 // Pages
@@ -502,6 +706,8 @@ tbody {
 
 // Front page
 .home {
+}
+.masthead {
 }
 
 // Blog front page
@@ -565,7 +771,8 @@ tbody {
 /* 9.0 Widgets */
 .sidebar {
 }
-
+.widgets {
+}
 .widget {
 }
 
@@ -575,8 +782,22 @@ tbody {
 
 .comment-list {
 }
+.comment {
+	.avatar {
+		display:block;
+		margin-bottom:1em;
+	}
+}
+.bypostauthor {
+}
 
 .comment-respond {
+}
+#comment,
+#author,
+#email,
+#url,
+{
 }
 
 /* 11.0 Media Queries */
@@ -584,8 +805,11 @@ tbody {
 	.hide-xxs {
 		display:none;
 	}
-	.show-xxs {
+	.block-xxs {
 		display:block;
+	}
+	.inline-xxs {
+		display:inline;
 	}
 }
 
@@ -593,8 +817,11 @@ tbody {
 	.hide-xs {
 		display:none;
 	}
-	.show-xs {
+	.block-xs {
 		display:block;
+	}
+	.inline-xs {
+		display:inline;
 	}
 }
 
@@ -602,8 +829,11 @@ tbody {
 	.hide-lap {
 		display:none;
 	}
-	.show-lap {
+	.block-lap {
 		display:block;
+	}
+	.inline-lap {
+		display:inline;
 	}
 }
 
@@ -611,8 +841,11 @@ tbody {
 	.hide-sm {
 		display:none;
 	}
-	.show-sm {
+	.block-sm {
 		display:block;
+	}
+	.inline-sm {
+		display:inline;
 	}
 }
 
@@ -620,8 +853,18 @@ tbody {
 	.hide-md {
 		display:none;
 	}
-	.show-md {
+	.block-md {
 		display:block;
+	}
+	.inline-md {
+		display:inline;
+	}
+
+	.alignleft {
+		float:left;
+	}
+	.alignright {
+		float:right;
 	}
 }
 
@@ -629,7 +872,29 @@ tbody {
 	.hide-lg {
 		display:none;
 	}
-	.show-lg {
+	.block-lg {
 		display:block;
 	}
+	.inline-lg {
+		display:inline;
+	}
 }
+
+@media all and (orientation: landscape) {
+}
+
+@media all and (orientation: portrait) {
+}
+
+@media print {
+	.hide-print {
+		display:none;
+	}
+	.block-print {
+		display:block;
+	}
+	.inline-print {
+		display:inline;
+	}
+}
+

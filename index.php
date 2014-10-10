@@ -1,5 +1,5 @@
 <?php
-// Default template file
+// Default template
 
 get_header(); ?>
 
@@ -24,6 +24,7 @@ else : // No posts found
 endif; // Loop ends
 
 do_action('after_posts');
+comments_template();
 
 ?>
 </div><!-- /.hfeed -->

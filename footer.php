@@ -9,7 +9,7 @@ do_action('after_main'); ?>
 <div class="colophon">
 
 	<div class="copy"><?php
-		echo apply_filters('the_colophon', __('Designed by AlexMarkus. Powered by WordPress.', 'first') );
+		echo apply_filters('the_colophon', __('Designed by AlexMarkus. Powered by WordPress.', 'mobilefirst') );
 	?></div>
 
 </div>

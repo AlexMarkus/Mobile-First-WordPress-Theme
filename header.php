@@ -5,10 +5,9 @@
 <html <?php language_attributes(); ?> class="no-js">
 <head>
 
-<meta charset="<?php bloginfo('charset'); ?>" />
-<meta name="viewport" content="initial-scale=1,user-scalable=yes,minimal-ui">
-
-<title><?php wp_title( __('&rsaquo;', 'first'), true, 'right' ); ?></title>
+<meta charset="<?php bloginfo('charset'); ?>">
+<meta name="viewport" content="<?php echo apply_filters('meta_viewport', 'initial-scale=1,user-scalable=yes,minimal-ui'); ?>">
+<title><?php wp_title( _x('›', 'title separator', 'mobilefirst'), true, 'right' ); ?></title>
 
 <?php wp_head(); ?>
 
@@ -17,23 +16,23 @@
 <body <?php body_class(); ?>>
 
 <a id="top"></a>
-<a href="#copy" class="srt skip-content"><?php _e('Skip to content &rsaquo;', 'first'); ?></a>
+<a href="#copy" class="srt skip-content"><?php _e('Skip to content ›', 'mobilefirst'); ?></a>
 
 <header class="header">
 
 <div class="branding">
 
-	<div class="title"><?php
-		printf( '<a href="%s">%s</a>',
+	<p class="logo"><?php
+		printf( '<a href="%s/">%s</a>',
 			get_home_url(),
 			apply_filters('branding_title', get_bloginfo('name', 'display'))
 		);
-	?></div>
+	?></p>
 
-	<div class="tagline"><?php echo apply_filters('branding_description', get_bloginfo('description')); ?></div>
+	<p class="tagline"><?php echo apply_filters('branding_description', get_bloginfo('description')); ?></p>
 
-	<p class="skip-nav"><a href="#nav" id="skip-nav"><?php _e('Show navigation', 'first'); ?></a></p>
-	<nav id="nav" class="nav"><?php
+	<p class="hide-lap skip-nav"><a href="#nav" id="skip-nav" title="<?php _e('Show navigation', 'mobilefirst'); ?>"><?php _e('Show navigation', 'mobilefirst'); ?></a></p>
+	<nav id="nav" class="hide block-lap nav"><?php
 		wp_nav_menu( array(
 			'theme_location' => 'nav',
 			'items_wrap' => '<ul class="%2$s">%3$s</ul>',

@@ -5,11 +5,11 @@
 // Prevent switching to this theme on older versions of WordPress
 if ( version_compare( $GLOBALS['wp_version'], '3.6', '<' ) ) {
 	switch_theme( WP_DEFAULT_THEME );
-	wp_die( __('This theme requires at least WordPress version 3.6. Please upgrade and try again.', 'first') );
+	wp_die( __('This theme requires at least WordPress version 3.6. Please upgrade and try again.', 'mobilefirst') );
 }
 
 
-// Set the recommended content width
+// Set a recommended content width
 if ( ! isset( $content_width ) ) {
 	$content_width = 768;
 }
@@ -20,16 +20,17 @@ if ( ! function_exists('mobilefirst_theme_setup') ) {
 function mobilefirst_theme_setup() {
 
 	// Make the theme available for translation
-	load_theme_textdomain( 'first', get_template_directory() . '/lib/lang' );
+	load_theme_textdomain( 'mobilefirst', get_template_directory() . '/lib/lang' );
 
 	// This theme uses featured images (post thumbnails)
 	add_theme_support( 'post-thumbnails' );
 	set_post_thumbnail_size(768, 0, false);
 	add_image_size( 'gallery', 300, 300, true );
+	add_image_size( 'full-md', 992 );
 
 	// This theme uses custom nav locations
 	$nav_menus = array(
-		'nav'      => __('Navigation', 'first'),
+		'nav'      => __('Navigation', 'mobilefirst'),
 	);
 	register_nav_menus( apply_filters('the_nav_menus', $nav_menus) );
 
@@ -63,7 +64,7 @@ if ( ! function_exists('mobilefirst_enqueue_styles') ) {
 function mobilefirst_enqueue_styles() {
 
 	// Theme stylesheet
-	wp_register_style( 'style', get_stylesheet_directory_uri() . '/style.css' );
+	wp_register_style( 'style', apply_filters('the_stylesheet_filename', get_stylesheet_uri()) );
 	wp_enqueue_style( 'style' );
 
 	// modernizr.js
@@ -76,8 +77,10 @@ function mobilefirst_enqueue_styles() {
 	wp_register_script( 'headroom', get_template_directory_uri() . '/lib/js/headroom.min.js', array(), false, true );
 
 	// Theme script
-	wp_enqueue_script( 'theme', get_template_directory_uri() . '/lib/js/theme.js', array(), false, true );
-	wp_localize_script( 'theme', 'theme', array());
+	wp_enqueue_script( 'theme', get_template_directory_uri() . '/lib/js/theme.min.js', array(), false, true );
+	if ( $the_localized_theme_script = apply_filters('the_localized_theme_script', array()) ) {
+		wp_localize_script( 'theme', 'theme', $the_localized_theme_script );
+	}
 
 	// Comment reply script for threaded comments
 	if ( is_singular() && comments_open() && get_option('thread_comments') ) {
@@ -95,11 +98,11 @@ if ( ! function_exists('mobilefirst_register_widget_areas') ) {
 function mobilefirst_register_widget_areas() {
 	register_sidebar( array(
 		'id'            => 'sidebar',
-		'name'          => __('Sidebar', 'first'),
-		'description'   => __('This is the default sidebar, the widgets you drag here will show up in various locations on your pages and posts.', 'first'),
-		'before_widget' => '<div id="%1$s" class="widget %2$s">',
+		'name'          => __('Sidebar', 'mobilefirst'),
+		'description'   => __('This is the default sidebar, the widgets you drag here will show up in various locations on your pages and posts.', 'mobilefirst'),
+		'before_widget' => '<div id="%1$s" class="w widget %2$s">',
 		'after_widget'  => '</div>',
-		'before_title'  => '<h4 class="widget-title">',
+		'before_title'  => '<h4 class="wt widget-title">',
 		'after_title'   => '</h4>',
 	) );
 }
@@ -109,33 +112,61 @@ add_action('widgets_init', 'mobilefirst_register_widget_areas');
 
 
 // Hooks&Filters
-
-include_once( dirname(__FILE__) . '/lib/helpers.php' );
-
-// Adds inline html5shiv and respond js
-add_action('wp_head', 'wp_head_inline_html5shiv', 6);
-add_action('wp_head', 'wp_head_respondjs_ie', 9);
-
-// Filter the html title, site title and colophon
-add_filter('wp_title', 'filter_the_wp_title', 10, 2);
-add_filter('branding_title', 'filter_the_branding_title');
-add_filter('the_colophon', 'filter_the_colophon');
-
-// Add body and post classes
-add_filter('body_class', 'filter_the_body_class', 12);
-add_filter('post_class', 'filter_the_post_class', 12);
-
-// Add breadcrumbs and page title before the feed
-add_action('before_posts', 'the_breadcrumbs');
-add_action('before_posts', 'the_page_header');
-
-// Add nav links and comments right after the feed
-add_action('after_posts', 'the_post_nav');
-add_action('after_posts', 'the_archive_nav');
-add_action('after_posts', 'comments_template');
-
-add_filter('shortcode_atts_gallery', 'filter_gallery_atts', 10, 3);
+include_once( get_template_directory() . '/lib/helpers.php' );
 
 // Shortcodes
-include_once( dirname(__FILE__) . '/lib/shortcodes.php' );
+include_once( get_template_directory() . '/lib/shortcodes.php' );
 
+
+if ( ! function_exists('mobilefirst_hooks_setup') ) {
+// Hook some theme functions and filters
+function mobilefirst_hooks_setup() {
+
+	// Make some optimizations
+	add_filter('script_loader_src', 'mobilefirst_remove_query_strings_1', 15, 1);
+	add_filter('style_loader_src', 'mobilefirst_remove_query_strings_1', 15, 1);
+	add_filter('script_loader_src', 'mobilefirst_remove_query_strings_2', 15, 1);
+	add_filter('style_loader_src', 'mobilefirst_remove_query_strings_2', 15, 1);
+	add_action('init', 'mobilefirst_cleanup_wp_head');
+	add_action('after_setup_theme', 'mobilefirst_move_scripts_on_footer');
+
+	// Use the minified stylesheet
+	add_filter('the_stylesheet_filename', 'mobilefirst_use_minified_stylesheet');
+
+	// Filter the html title, site title and colophon
+	add_filter('wp_title', 'filter_the_wp_title', 10, 2);
+	add_filter('branding_title', 'filter_the_branding_title');
+	add_filter('the_colophon', 'filter_the_colophon');
+
+	// Add body and post classes
+	add_filter('body_class', 'filter_the_body_class', 12);
+	add_filter('post_class', 'filter_the_post_class', 12);
+
+	// Add breadcrumbs and page title before the feed
+	add_action('before_posts', 'the_breadcrumbs');
+	add_action('before_posts', 'the_page_header');
+
+	// Post content templates
+	add_filter('the_post_header', 'the_post_title');
+	add_filter('the_post_header', 'the_posted_on');
+	add_filter('after_post_content', 'the_post_meta');
+
+	// Add nav links right after the feed
+	add_action('after_posts', 'the_post_nav');
+	add_action('after_posts', 'the_archive_nav');
+
+	// Better resolution for galleries
+	add_filter('shortcode_atts_gallery', 'filter_gallery_atts', 10, 3);
+
+	// Hide ACF field admin menu item when not on localhost
+	if ( $_SERVER["SERVER_ADDR"] != '::1' ) {
+		add_filter('acf/settings/show_admin', '__return_false');
+	}
+}
+}
+
+add_action('wp', 'mobilefirst_hooks_setup', 8);
+
+
+// Done with the theme setup
+do_action('after_theme_functions');

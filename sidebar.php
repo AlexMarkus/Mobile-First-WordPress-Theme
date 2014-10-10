@@ -2,10 +2,10 @@
 // Main sidebar
 
 // Check if the sidebar is not empty and show it
-if ( is_active_sidebar('sidebar') ) :
+if ( is_active_sidebar('sidebar') ) {
 
 ?>
-	<aside class="sidebar">
+	<aside class="widgets sidebar">
 	<?php
 		do_action('before_sidebar');
 		dynamic_sidebar('sidebar');
@@ -15,4 +15,4 @@ if ( is_active_sidebar('sidebar') ) :
 
 <?php
 
-endif;
+}
