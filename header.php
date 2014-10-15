@@ -31,8 +31,8 @@
 
 	<p class="tagline"><?php echo apply_filters('branding_description', get_bloginfo('description')); ?></p>
 
-	<p class="hide-lap skip-nav"><a href="#nav" id="skip-nav" title="<?php _e('Show navigation', 'mobilefirst'); ?>"><?php _e('Show navigation', 'mobilefirst'); ?></a></p>
-	<nav id="nav" class="hide block-lap nav"><?php
+	<p class="hide-lap hide-nojs skip-nav"><a href="#nav" id="skip-nav" title="<?php _e('Show navigation', 'mobilefirst'); ?>"><?php _e('Show navigation', 'mobilefirst'); ?></a></p>
+	<nav id="nav" class="hide block-nojs block-lap nav"><?php
 		wp_nav_menu( array(
 			'theme_location' => 'nav',
 			'items_wrap' => '<ul class="%2$s">%3$s</ul>',

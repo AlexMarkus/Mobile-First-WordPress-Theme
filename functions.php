@@ -35,7 +35,7 @@ function mobilefirst_theme_setup() {
 	register_nav_menus( apply_filters('the_nav_menus', $nav_menus) );
 
 	// This theme supports html5
-	$html5_support = array( 'gallery', 'caption' );
+	$html5_support = array( 'gallery', 'caption', 'comment-list', 'comment-form', 'search-form' );
 	add_theme_support( 'html5', $html5_support );
 
 	add_theme_support( 'automatic-feed-links' );
@@ -64,21 +64,21 @@ if ( ! function_exists('mobilefirst_enqueue_styles') ) {
 function mobilefirst_enqueue_styles() {
 
 	// Theme stylesheet
-	wp_register_style( 'style', apply_filters('the_stylesheet_filename', get_stylesheet_uri()) );
+	wp_register_style( 'style', apply_filters('mobilefirst_stylesheet_filename', get_stylesheet_uri()) );
 	wp_enqueue_style( 'style' );
 
 	// modernizr.js
-	wp_register_script( 'modernizr', get_template_directory_uri() . '/lib/js/modernizr.custom.min.js', array(), false, true );
+	wp_register_script( 'modernizr', get_template_directory_uri() . '/lib/js/min/modernizr.custom.min.js', array(), false, true );
 
 	// fastclick.js
-	wp_register_script( 'fastclick', get_template_directory_uri() . '/lib/js/fastclick.min.js', array(), false, true );
+	wp_register_script( 'fastclick', get_template_directory_uri() . '/lib/js/min/fastclick.min.js', array(), false, true );
 
 	// headroom.js
-	wp_register_script( 'headroom', get_template_directory_uri() . '/lib/js/headroom.min.js', array(), false, true );
+	wp_register_script( 'headroom', get_template_directory_uri() . '/lib/js/min/headroom.min.js', array(), false, true );
 
 	// Theme script
-	wp_enqueue_script( 'theme', get_template_directory_uri() . '/lib/js/theme.min.js', array(), false, true );
-	if ( $the_localized_theme_script = apply_filters('the_localized_theme_script', array()) ) {
+	wp_enqueue_script( 'theme', get_template_directory_uri() . '/lib/js/min/theme.min.js', array(), false, true );
+	if ( $the_localized_theme_script = apply_filters('mobilefirst_localized_theme_script', array()) ) {
 		wp_localize_script( 'theme', 'theme', $the_localized_theme_script );
 	}
 
@@ -122,41 +122,36 @@ if ( ! function_exists('mobilefirst_hooks_setup') ) {
 // Hook some theme functions and filters
 function mobilefirst_hooks_setup() {
 
-	// Make some optimizations
-	add_filter('script_loader_src', 'mobilefirst_remove_query_strings_1', 15, 1);
-	add_filter('style_loader_src', 'mobilefirst_remove_query_strings_1', 15, 1);
-	add_filter('script_loader_src', 'mobilefirst_remove_query_strings_2', 15, 1);
-	add_filter('style_loader_src', 'mobilefirst_remove_query_strings_2', 15, 1);
-	add_action('init', 'mobilefirst_cleanup_wp_head');
-	add_action('after_setup_theme', 'mobilefirst_move_scripts_on_footer');
-
 	// Use the minified stylesheet
-	add_filter('the_stylesheet_filename', 'mobilefirst_use_minified_stylesheet');
+	//add_filter('mobilefirst_stylesheet_filename', 'mobilefirst_minified_stylesheet');
+	//add_filter('wp_head', 'mobilefirst_html_js_class');
+	//add_filter('wp_head', 'mobilefirst_inline_html5shiv');
+	//add_filter('wp_head', 'mobilefirst_respondjs');
 
 	// Filter the html title, site title and colophon
-	add_filter('wp_title', 'filter_the_wp_title', 10, 2);
-	add_filter('branding_title', 'filter_the_branding_title');
-	add_filter('the_colophon', 'filter_the_colophon');
+	add_filter('wp_title', 'mobilefirst_wp_title', 10, 2);
+	add_filter('branding_title', 'mobilefirst_branding_title');
+	add_filter('the_colophon', 'mobilefirst_colophon');
 
 	// Add body and post classes
-	add_filter('body_class', 'filter_the_body_class', 12);
-	add_filter('post_class', 'filter_the_post_class', 12);
+	add_filter('body_class', 'mobilefirst_body_classes', 12);
+	add_filter('post_class', 'mobilefirst_post_class', 12);
 
 	// Add breadcrumbs and page title before the feed
-	add_action('before_posts', 'the_breadcrumbs');
-	add_action('before_posts', 'the_page_header');
+	add_action('before_posts', 'mobilefirst_breadcrumbs');
+	add_action('before_posts', 'mobilefirst_page_header');
 
 	// Post content templates
-	add_filter('the_post_header', 'the_post_title');
-	add_filter('the_post_header', 'the_posted_on');
-	add_filter('after_post_content', 'the_post_meta');
+	add_filter('the_post_header', 'mobilefirst_post_title');
+	add_filter('the_post_header', 'mobilefirst_postedon');
+	add_filter('after_post_content', 'mobilefirst_post_meta');
 
 	// Add nav links right after the feed
-	add_action('after_posts', 'the_post_nav');
-	add_action('after_posts', 'the_archive_nav');
+	add_action('after_posts', 'mobilefirst_post_nav');
+	add_action('after_posts', 'mobilefirst_archive_nav');
 
 	// Better resolution for galleries
-	add_filter('shortcode_atts_gallery', 'filter_gallery_atts', 10, 3);
+	add_filter('shortcode_atts_gallery', 'mobilefirst_gallery_atts', 10, 3);
 
 	// Hide ACF field admin menu item when not on localhost
 	if ( $_SERVER["SERVER_ADDR"] != '::1' ) {

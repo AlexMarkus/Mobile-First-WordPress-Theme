@@ -1,4 +1,4 @@
-/*
+/*!
 Theme Name: MobileFirst
 Theme URI:  
 Description: The responsive, mobile first WordPress starter theme.
@@ -11,54 +11,16 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: mobilefirst
 */
 
-/* 1.0 Libraries & mixins */
+/* 1.0 Libraries */
 
 // Libraries
-@import (less) "../mobilefirst/lib/css/normalize.min.css";
-
-// #Mixins
-.box-sizing(@sizing:border-box) {
-	-ms-box-sizing:@sizing;
-	-moz-box-sizing:@sizing;
-	-webkit-box-sizing:@sizing;
-	box-sizing:@sizing;
-}
-.opacity(@opacity) {
-	-moz-opacity:@opacity;
-	-khtml-opacity:@opacity;
-	-webkit-opacity:@opacity;
-	opacity:@opacity;
-}
-.border-radius(...) {
-	-webkit-border-radius:@arguments;
-	-moz-border-radius:@arguments;
-	border-radius:@arguments;
-}
-.box-shadow(...) {
-	-webkit-box-shadow:@arguments;
-	-moz-box-shadow:@arguments;
-	box-shadow:@arguments;
-}
-.transform(...) {
-	-webkit-transform:@arguments;
-	-moz-transform:@arguments;
-	-o-transform:@arguments;
-	-ms-transform:@arguments;
-	transform:@arguments;
-}
-.transition(...) {
-	-webkit-transition:@arguments;
-	-moz-transition:@arguments;
-	-o-transition:@arguments;
-	transition:@arguments;
-}
-
+@import (less) "../mobilefirst/lib/css/normalize.css";
 
 /* 2.0 Repeatable patterns */
 
 // Render everything as a border-box
 *, *:before, *:after {
-	.box-sizing;
+	box-sizing:border-box;
 }
 
 // Responsive images and embeds
@@ -114,13 +76,24 @@ input, select, button, textarea, iframe {
 	display:none;
 }
 .show {
-	display:block;
+	display:block!important;
 }
 .invisible {
 	visibility:hidden;
 }
 
 // JS classes
+.no-js {
+	.hide-nojs {
+		display:none;
+	}
+	.block-nojs {
+		display:block;
+	}
+	.inline-nojs {
+		display:inline;
+	}
+}
 .js {
 	.hide-js {
 		display:none;
@@ -149,8 +122,10 @@ input, select, button, textarea, iframe {
 	overflow:hidden;
 }
 .srt {
+	clip:rect(1px 1px 1px 1px);
 	clip:rect(1px, 1px, 1px, 1px);
 	position:absolute;
+	left:-100%;
 	&:focus {
 		display:block;
 		z-index:1000;
@@ -251,12 +226,28 @@ input, select, button, textarea, iframe {
 		width:992px;
 	}
 }
-.c992 {
-	width:992px;
-	margin-left:auto;
-	margin-right:auto;
-}
 .row {
+	// Flexbox row
+	&.flex {
+		.flexbox & {
+			@media @lap {
+				display:flex;
+				flex-wrap:nowrap;
+				flex-direction:row;
+			}
+		}
+	}
+	// Table row
+	&.table {
+		@media @lap {
+			display:table;
+			table-layout:fixed;
+			.cell {
+				display:table-cell;
+				float:none;
+			}
+		}
+	}
 }
 
 .col-xs-auto, .col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12 {
@@ -393,54 +384,15 @@ input, select, button, textarea, iframe {
 	}
 }
 
-// #Flexbox grid
-.row {
-	&.flex {
-		.flexbox & {
-			display:flex;
-			flex-wrap:wrap;
-			flex-direction:row;
-			@media @lap {
-				flex-wrap:nowrap;
-			}
-		}
-	}
-}
-
-// #Table grid
-.row {
-	&.table {
-		@media @lap {
-			width:100%;
-			display:table;
-			table-layout:fixed;
-			.cell {
-				display:table-cell;
-				float:none;
-			}
-		}
-	}
-}
-
 // #Basic styles
 html {
 }
 
 body {
-	line-height:1.5;
-	max-width:48em;
-	.center-block;
 }
 
 h1, h2, h3, h4, h5, h6,
 {
-	margin-bottom:1rem;
-	margin-top:1rem;
-}
-h1, h2, h3, h4,
-{
-	line-height:1.125;
-	font-weight:normal;
 }
 
 a {
@@ -457,8 +409,9 @@ a {
 p {
 }
 
+blockquote {
+}
 ul, ol {
-	padding-left:1em;
 }
 
 blockquote {
@@ -474,9 +427,8 @@ figure {
 ::-moz-selection {
 }
 
+// Forms & inputs
 form {
-	margin-top:1em;
-	margin-bottom:1em;
 }
 fieldset {
 }
@@ -494,6 +446,12 @@ textarea,
 }
 textarea {
 }
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+{
+}
 
 // Input states
 [disabled="disabled"] {	
@@ -507,13 +465,7 @@ textarea {
 :-ms-input-placeholder {
 }
 
-button,
-input[type="button"],
-input[type="submit"],
-input[type="reset"],
-{
-}
-
+// Tables
 table {
 }
 tr {
@@ -535,45 +487,6 @@ tbody {
 	word-wrap:break-word;
 }
 
-.branding .logo,
-.branding .tagline,
-.branding .skip-nav,
-.branding .nav,
-.hfeed .page-header,
-.hfeed .entry-title,
-.hfeed .entry-meta,
-.hfeed .featured-image,
-.hfeed .entry-content,
-.hfeed .post-nav,
-.hfeed .archive-nav,
-.sidebar .widget,
-.comments-title,
-.comment-list,
-.comment-respond,
-.footer .colophon,
-{
-	padding-left:1rem;
-	padding-right:1rem;
-}
-
-.nav,
-.comments,
-.widgets,
-{
-	ul {
-		list-style:none;
-		padding-left:0;
-		ul {
-			padding-left:1em;
-		}
-	}
-}
-
-.gallery,
-{
-	.cf;
-}
-
 // Ready to use site classes
 .btn {
 }
@@ -582,14 +495,25 @@ tbody {
 .header {
 }
 .branding {
+	.logo {
+	}
+	.tagline {
+	}
 }
 .nav {
+}
+#nav {
+	&:target {
+		display:block!important;
+	}
 }
 
 .skip-nav {
 }
 
 // Page header
+.breadcrumbs {
+}
 .page-header {
 }
 .page-title {
@@ -598,8 +522,8 @@ tbody {
 }
 
 .page-title,
-.single .et,
-.page .et,
+.single h1.et,
+.page h1.et,
 {
 }
 
@@ -636,10 +560,6 @@ tbody {
 .entry-meta {
 }
 .postedon {
-	display:none;
-	.type-post & {
-		display:block;
-	}
 }
 .featured-image {
 	img {

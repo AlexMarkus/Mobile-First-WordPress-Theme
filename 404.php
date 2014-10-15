@@ -11,15 +11,16 @@ do_action('before_posts');
 
 ?>
 
-	<article <?php post_class(); ?>>
+	<article class="hentry error-404">
 	
 	<header>
-	<h1 class="et entry-title"><?php _e('Page not found', 'mobilefirst'); ?></h1>
+	<h1 class="et entry-title"><?php echo apply_filters('the_title', __('Page not found', 'mobilefirst')); ?></h1>
 	</header>
 	
-	<div class="ec entry-content">
-	<p><?php _e('Sorry, the requested page does not exist or is not available at this time.', 'mobilefirst'); ?></p>
-	</div>
+	<div class="ec entry-content"><?php
+
+		echo apply_filters('the_content', __('Sorry, the requested page does not exist or is not available at this time.', 'mobilefirst'));
+	?></div>
 	
 	</article>
 

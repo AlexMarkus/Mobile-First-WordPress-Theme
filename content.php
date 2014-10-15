@@ -1,8 +1,6 @@
 <?php
 // Default post content
 
-do_action('before_post');
-
 ?>
 	<article <?php post_class(); ?>>
 	
@@ -31,4 +29,3 @@ do_action('before_post');
 	<?php do_action('after_post_content'); ?>
 	
 	</article>
-<?php do_action('after_post'); ?>

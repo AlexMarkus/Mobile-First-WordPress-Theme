@@ -285,7 +285,7 @@ function mobilefirst_page_header() {
 	} elseif ( is_home() || is_page_template('home.php') ) {
 		
 		if ( is_home() ) {
-			$page_for_posts = get_option('page_for_posts' );
+			$page_for_posts = get_option('page_for_posts');
 		} else {
 			$page_for_posts = get_the_id();
 		}
@@ -308,6 +308,11 @@ function mobilefirst_page_header() {
 			query_posts('post_type=post&paged=' . $paged);
 		}
 	
+	} elseif ( is_single() ) {
+		$page_for_posts = get_option('page_for_posts');
+		$blog_page = get_post( $page_for_posts );
+		$page_title = apply_filters('the_title', $blog_page->post_title);
+		$page_description = wpautop($blog_page->post_content);
 	}
 
 	$page_title = apply_filters('the_page_title', $page_title);
@@ -413,7 +418,7 @@ function mobilefirst_inline_html5shiv() {
 
 // Conditionally load the respond.js script
 function mobilefirst_respondjs() {
-	printf( '<!--[if lt IE 9]><script src="%s/lib/js/respond.min.js"></script><![endif]-->' . "\n", get_template_directory_uri() );
+	printf( '<!--[if lt IE 9]><script src="%s/lib/js/min/respond.min.js"></script><![endif]-->' . "\n", get_template_directory_uri() );
 }
 
 // Inline script to add a html .js class
