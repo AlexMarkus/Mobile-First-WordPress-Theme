@@ -77,7 +77,7 @@ function mobilefirst_enqueue_styles() {
 	wp_register_script( 'headroom', get_template_directory_uri() . '/lib/js/min/headroom.min.js', array(), false, true );
 
 	// Theme script
-	wp_enqueue_script( 'theme', get_template_directory_uri() . '/lib/js/min/theme.min.js', array(), false, true );
+	wp_enqueue_script( 'theme', apply_filters('mobilefirst_script_filename', get_template_directory_uri() . '/lib/js/min/theme.min.js'), array(), false, true );
 	if ( $the_localized_theme_script = apply_filters('mobilefirst_localized_theme_script', array()) ) {
 		wp_localize_script( 'theme', 'theme', $the_localized_theme_script );
 	}
@@ -124,9 +124,8 @@ function mobilefirst_hooks_setup() {
 
 	// Use the minified stylesheet
 	//add_filter('mobilefirst_stylesheet_filename', 'mobilefirst_minified_stylesheet');
-	//add_filter('wp_head', 'mobilefirst_html_js_class');
-	//add_filter('wp_head', 'mobilefirst_inline_html5shiv');
-	//add_filter('wp_head', 'mobilefirst_respondjs');
+	add_filter('wp_head', 'mobilefirst_inline_html5shiv');
+	add_filter('wp_head', 'mobilefirst_respondjs');
 
 	// Filter the html title, site title and colophon
 	add_filter('wp_title', 'mobilefirst_wp_title', 10, 2);

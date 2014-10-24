@@ -227,16 +227,6 @@ input, select, button, textarea, iframe {
 	}
 }
 .row {
-	// Flexbox row
-	&.flex {
-		.flexbox & {
-			@media @lap {
-				display:flex;
-				flex-wrap:nowrap;
-				flex-direction:row;
-			}
-		}
-	}
 	// Table row
 	&.table {
 		@media @lap {
@@ -246,6 +236,17 @@ input, select, button, textarea, iframe {
 				display:table-cell;
 				float:none;
 			}
+		}
+	}
+	// Flexbox row
+	&.flex {
+		@media @lap {
+			display:flex;
+			flex-wrap:nowrap;
+			flex-direction:row;
+		}
+		.flexbox & {
+			// When used with modernizr
 		}
 	}
 }
@@ -407,11 +408,15 @@ a {
 }
 
 p {
+	margin:1em 0;
 }
 
-blockquote {
-}
 ul, ol {
+	padding-left:1em;
+	margin:1em 0;
+	ul, ol {
+		margin:0;
+	}
 }
 
 blockquote {

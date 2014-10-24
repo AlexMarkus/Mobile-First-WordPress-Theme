@@ -418,7 +418,7 @@ function mobilefirst_inline_html5shiv() {
 
 // Conditionally load the respond.js script
 function mobilefirst_respondjs() {
-	printf( '<!--[if lt IE 9]><script src="%s/lib/js/min/respond.min.js"></script><![endif]-->' . "\n", get_template_directory_uri() );
+	printf( '<!--[if IE 8]><script src="%s/lib/js/min/respond.min.js"></script><![endif]-->' . "\n", get_template_directory_uri() );
 }
 
 // Inline script to add a html .js class
